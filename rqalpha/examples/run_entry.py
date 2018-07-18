@@ -1,13 +1,15 @@
 from rqalpha.api import *
 from rqalpha import run_file
 
+sl = ['510500.XSHG', '162411.XSHE']
+
 config = {
     "base": {
-        "start_date": "2017-03-01",
-        "end_date": "2018-07-01",
-        "benchmark": '162411.XSHE',
+        "start_date": "2015-07-10",
+        "end_date": "2018-07-05",
+        "benchmark": sl[1],
         "accounts": {
-            "stock": 100000
+            "stock": 200000
         }
     },
     "mod": {
@@ -17,7 +19,7 @@ config = {
         },
         "sys_analyser": {
             "enabled": True,
-            #"plot": True,
+            "plot": True,
         }
     }
 }

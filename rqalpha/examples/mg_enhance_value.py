@@ -1,21 +1,28 @@
 from rqalpha.api import *
 
+sl = ['510500.XSHG', '162411.XSHE']
+gl = [0.02, 0.05]
+lot_l = [10000, 7000]
+en_l = [0.4, 0.4]
+
+
+p_format = lambda val: ('%.3f' % val).ljust(10)
+lot_format = lambda val: ('%.0f' % val).ljust(10)
+
 
 def init(context):
-    context.S1 = "162411.XSHE"  # ""510500.XSHG"
-    context.V_ENHANCE = 0.3
-    context.UNIT = 11000
+    context.S1 = sl[1]
+    context.V_ENHANCE = en_l[1]
+    context.UNIT = lot_l[1]
     context.INIT_S = 1
-    context.MARGIN = 0.05
+    context.MARGIN = gl[1]
     context.FIRST_P = 0
     context.hold_level = -1
-    context.hold_level_pre = 0
     context.inited = False
     logger.info("RunInfo: {}".format(context.run_info))
 
 
 def before_trading(context):
-    context.hold_level_pre = context.hold_level
     pass
 
 
@@ -40,31 +47,37 @@ def next_sell_p_v(context):
 
 
 def buy(context, bp):
-    logger.info("buy: {}".format(bp))
     if context.portfolio.cash < bp['value']:
-        logger.warn("Failed buy: price {}, need_cash {}, remain_cash {}"
-                    .format(bp['price'], bp['value'], context.portfolio.cash))
+        logger.warn("Fail to buy".ljust(10) + ':' + trade_info(context, bp))
         return
     res = order_value(context.S1, bp['value'], price=bp['price'])
     if res.status == ORDER_STATUS.FILLED:
         context.hold_level += 1
-        logger.info("Hold level changed: {}".format(context.hold_level))
+        logger.info("Buy".ljust(10) + ':' + trade_info(context, bp))
     else:
         logger.warn("Failed buy: {}".format(res))
 
 
 def sell(context, sp):
-    logger.info("sell: {}".format(sp))
     if context.portfolio.market_value < sp['value']:
-        logger.warn("Failed sell: price {}, need_value {}, remain_value {}"
-                    .format(sp['price'], sp['value'], context.portfolio.market_value))
+        logger.warn("Fail to sell".ljust(10) + ':' + trade_info(context, sp))
         return
     res = order_value(context.S1, -1 * sp['value'], price=sp['price'])
     if res.status == ORDER_STATUS.FILLED:
         context.hold_level -= 1
-        logger.info("Hold level changed: {}".format(context.hold_level))
+        logger.info("Sell".ljust(10) + ':' + trade_info(context, sp))
     else:
         logger.warn("Failed sell: {}".format(res))
+
+
+def trade_info(context, tp):
+    return "gid {} price {} lot {} sum_lot {} cash {} profit {}"\
+        .format(lot_format(context.hold_level),
+                p_format(tp['price']),
+                lot_format(tp['value']),
+                lot_format(context.portfolio.market_value),
+                lot_format(context.portfolio.cash),
+                lot_format(context.portfolio.cash + context.portfolio.market_value - context.portfolio.starting_cash))
 
 
 def handle_bar(context, bar_dict):
@@ -91,10 +104,4 @@ def handle_bar(context, bar_dict):
 
 
 def after_trading(context):
-    if context.hold_level_pre != context.hold_level:
-        profit = (context.portfolio.cash + context.portfolio.market_value - context.portfolio.starting_cash)
-        logger.info("after_trading: market_value {}, profit {}, profit-pct {}".
-                    format(context.portfolio.market_value, profit, profit/context.portfolio.market_value))
-        # profit_pct = profit / (context.portfolio.market_value - profit)
-        # logger.info("after_trading: market_value {}, profit {}, percent {}".
-        #             format(context.portfolio.market_value, profit, profit_pct))
+    pass
