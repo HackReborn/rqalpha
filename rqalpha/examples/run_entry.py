@@ -17,7 +17,7 @@ config = {
         },
         "sys_analyser": {
             "enabled": True,
-            "plot": True,
+            #"plot": True,
         }
     }
 }
@@ -26,5 +26,12 @@ config = {
 strategy_file_path = "./mg_enhance_value.py"
 
 result_dict = run_file(strategy_file_path, config)
+res_keys = result_dict['sys_analyser'].keys()
+#for key in res_keys:
+#    logger.info("------ {}: {}".format(key, (result_dict['sys_analyser'])[key]))
 
-#logger.info("Result: {}".format(result_dict))
+
+logger.info("------ {}:\n {}".format('trades', (result_dict['sys_analyser'])['trades']))
+
+
+#logger.info("Result: {}".format(result_dict['sys_analyser'].keys()))
