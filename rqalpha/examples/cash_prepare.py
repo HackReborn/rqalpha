@@ -20,10 +20,10 @@ def most_cash_prep(one_slot_size, start_p, wor_p, gap, lot_enhance):
 
 # 500ETF 2018.07.18
 print('500ETF')
-most_cash_prep(one_slot_size=1, start_p=5.475, wor_p=4.884, gap=0.02, lot_enhance=0.4)
+most_cash_prep(one_slot_size=10000, start_p=5.475, wor_p=4.884, gap=0.02, lot_enhance=0.4)
 
 print('--------------------------------')
 
 # HuaBao 2018.07.18
 print('HuaBao')
-most_cash_prep(one_slot_size=1, start_p=0.694, wor_p=0.5, gap=0.05, lot_enhance=0.3)
+most_cash_prep(one_slot_size=7000, start_p=0.694, wor_p=0.5, gap=0.05, lot_enhance=0.4)
