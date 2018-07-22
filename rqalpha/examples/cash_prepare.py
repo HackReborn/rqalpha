@@ -13,6 +13,7 @@ def most_cash_prep(one_slot_size, start_p, wor_p, gap, lot_enhance):
         current_lot = round(one_slot_size * ((1 + lot_enhance) ** gid), 3)
         most += current_lot
         print("Gid ", gid,
+              (("%.0f" % (-1 * gid * gap * 100))+"%").ljust(4),
               ": price %.3f" % (start_p * (1 - gap * gid)),
               ", lot %.3f" % current_lot, ", whole lot %.3f" % most)
     return most
@@ -20,10 +21,16 @@ def most_cash_prep(one_slot_size, start_p, wor_p, gap, lot_enhance):
 
 # 500ETF 2018.07.18
 print('500ETF')
-most_cash_prep(one_slot_size=10000, start_p=5.475, wor_p=4.884, gap=0.02, lot_enhance=0.4)
+most_cash_prep(one_slot_size=10000, start_p=5.436, wor_p=4.884, gap=0.02, lot_enhance=0.4)
 
 print('--------------------------------')
 
 # HuaBao 2018.07.18
 print('HuaBao')
 most_cash_prep(one_slot_size=7000, start_p=0.694, wor_p=0.5, gap=0.05, lot_enhance=0.4)
+
+print('--------------------------------')
+
+# 50ETF 2018.07.20
+print('50ETF')
+most_cash_prep(one_slot_size=10000, start_p=2.540, wor_p=2.000, gap=0.04, lot_enhance=0.4)
